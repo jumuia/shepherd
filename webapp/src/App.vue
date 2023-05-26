@@ -7,8 +7,9 @@ import Button from "./components/widgets/Button.vue"
   <header>
     <div class="wrapper">
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/">Home</RouterLink> |
+        <RouterLink to="/about">About</RouterLink> |
+        <RouterLink to="/users">Users</RouterLink> |
       </nav>
     </div>
   </header>

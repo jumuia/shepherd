@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,6 +21,18 @@ type Config struct {
 
 func Run(cfg *Config) error {
 	r := gin.Default()
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"https://localhost:5050"},
+		AllowMethods:     []string{"PUT", "PATCH", "GET"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return true
+			// return origin == "https://github.com"
+		},
+		MaxAge: 12 * time.Hour,
+	}))
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
@@ -27,6 +40,7 @@ func Run(cfg *Config) error {
 			"time":    time.Now().String(),
 		})
 	})
+	setupRoutes(r)
 
 	addr := fmt.Sprintf(":%s", cfg.Port)
 	return r.Run(addr)
