@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -9,9 +10,13 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+	whichEnv := os.Getenv("APP_ENV")
+	fmt.Println("APP_ENV:", whichEnv)
+	if whichEnv == "development" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatalf("Error loading .env file: %v", err)
+		}
 	}
 	port := os.Getenv("PORT")
 	dbName := os.Getenv("DB_NAME")
@@ -29,7 +34,7 @@ func main() {
 		DBHost:     dbHost,
 		DBPort:     dbPort,
 	}
-	err = server.Run(&cfg)
+	err := server.Run(&cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
