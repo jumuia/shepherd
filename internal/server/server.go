@@ -2,11 +2,13 @@ package server
 
 import (
 	"fmt"
+	"io/fs"
 	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/jumuia/shepherd"
 )
 
 type Config struct {
@@ -33,6 +35,11 @@ func Run(cfg *Config) error {
 		},
 		MaxAge: 12 * time.Hour,
 	}))
+	subFS, err := fs.Sub(shepherd.WebappUIFS, "dist")
+	if err != nil {
+		return err
+	}
+	r.StaticFS("/webapp", http.FS(subFS))
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

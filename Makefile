@@ -24,18 +24,22 @@ publish:
 	docker push $(DOCKER_REPOSITORY_OWNER)/$(BINARY_NAME):$(VERSION)
 setup:
 	$(GOGET) -v ./...
-build:
+ui-build:
+	cd webapp; npm install; npm run build
+build: ui-build
 ifeq ($(OS),Windows_NT)
 	$(GOBUILD) -o ./$(BINARY_LOC)/$(BINARY_NAME).exe -v ./cmd/$(BINARY_NAME)/...
 else
 	$(GOBUILD) -o ./$(BINARY_LOC)/$(BINARY_NAME) -v ./cmd/$(BINARY_NAME)/...
 endif
+	cp ./bin/shepherd ~/Downloads/
 test:
 	$(GOTEST) -v ./...
 clean:
 	$(GOCLEAN)
 	rm -rf $(BINARY_LOC)
 	rm -rf db-data
+	rm -rf dist
 run: clean build
 ifeq ($(OS),Windows_NT)
 	./$(BINARY_LOC)/$(BINARY_NAME).exe
