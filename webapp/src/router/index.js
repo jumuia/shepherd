@@ -16,8 +16,22 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
-    }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/LoginView.vue')
+    },
   ]
 })
+
+// router.beforeEach((to, from) => {
+//   const isAuthenticated = false;
+//   if (!isAuthenticated) {
+//     // redirect the user to the login page
+//     return { name: 'login' }
+//   }
+//   return { name: 'home' }
+// })
 
 export default router
